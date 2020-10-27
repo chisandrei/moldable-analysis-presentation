@@ -31,6 +31,8 @@ MoldableAnalysisPresentation >> codeFromSelector: aSelector [
 
 { #category : #code }
 MoldableAnalysisPresentation >> downloadArgoUMLCodeAndMSE [
+	<gtExample>
+	<noTest>
 	| targetFolder archiveFileName archiveUrl |
 	"Download ArgoUML code and MSE model file"
 	targetFolder := 'models' asFileReference ensureCreateDirectory.
@@ -47,13 +49,30 @@ MoldableAnalysisPresentation >> downloadArgoUMLCodeAndMSE [
 ]
 
 { #category : #code }
-MoldableAnalysisPresentation >> extractBuildFoldersAndFiles [
-	| interestingDirectories model |
+MoldableAnalysisPresentation >> extractBuildFoldersAndFilesFromModel: model [
+	<gtExample>
+	| interestingDirectories |
 	interestingDirectories := model rootFolder/ 'src' withDeepCollect: [: each | 
 		(each files anySatisfy: [ :f |
 			f basename asLowercase = 'build.xml' ])
 				ifTrue: [ #() ]
 				ifFalse: [ each directories ] ].        
+]
+
+{ #category : #code }
+MoldableAnalysisPresentation >> extractDeprecatedGraphicalComponents [
+	| graphicalComponents model |
+	graphicalComponents select: [ :each |
+		each providerTypes anySatisfy: [ :provider |
+			provider isAnnotatedWith: 'Deprecated'] ]
+]
+
+{ #category : #code }
+MoldableAnalysisPresentation >> extractGraphicalComponents [
+	| graphicalComponents model |
+	graphicalComponents := model allModelClasses select: [ :aClass |
+		aClass superclassHierarchyGroup anySatisfy: [ :aSuperclass |
+			aSuperclass mooseName = 'java::awt::Component' ] ]
 ]
 
 { #category : #code }
@@ -86,6 +105,12 @@ MoldableAnalysisPresentation >> loadMSEModelIntoImage [
 	model := MooseModel new
 		importMSEFromFile: modelFile.
 	model
+]
+
+{ #category : #code }
+MoldableAnalysisPresentation >> openArgoUmlReport [
+	| model |
+	ArgoUMLReport onModel: model
 ]
 
 { #category : #code }
@@ -135,7 +160,7 @@ MoldableAnalysisPresentation >> slide3For: aSlide [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
 				self codeFromSelector: #extractUsedDeprecatedClasses.
-				self codeFromSelector: #visualizeDeprecatedClasses
+				self codeFromSelector: #visualizeDeprecatedClassesFor:
 			}) asElement. ]
 ]
 
@@ -186,8 +211,33 @@ MoldableAnalysisPresentation >> slide7For: aSlide [
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractBuildFoldersAndFiles.
+				self codeFromSelector: #extractBuildFoldersAndFilesFromModel:.
 				self codeFromSelector: #visualizeBuildFiles
+			}) asElement. ]
+]
+
+{ #category : #slides }
+MoldableAnalysisPresentation >> slide8For: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 8;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #extractGraphicalComponents.
+				self codeFromSelector: #extractDeprecatedGraphicalComponents
+			}) asElement. ]
+]
+
+{ #category : #slides }
+MoldableAnalysisPresentation >> slide9For: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 9;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #openArgoUmlReport
 			}) asElement. ]
 ]
 
@@ -223,8 +273,9 @@ MoldableAnalysisPresentation >> visualizeBuildFiles [
 ]
 
 { #category : #code }
-MoldableAnalysisPresentation >> visualizeDeprecatedClasses [
-	| view stillUsedClasses |
+MoldableAnalysisPresentation >> visualizeDeprecatedClassesFor: stillUsedClasses [
+	<gtExample>
+	| view |
 	view := GtMondrian new. 
 	
 	view nodes
