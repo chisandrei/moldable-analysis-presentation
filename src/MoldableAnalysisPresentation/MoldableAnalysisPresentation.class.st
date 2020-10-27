@@ -4,6 +4,14 @@ Class {
 	#category : #MoldableAnalysisPresentation
 }
 
+{ #category : #slides }
+MoldableAnalysisPresentation >> anyBoundarySlideFor: aSlide [
+	<gtSlide>
+	^ aSlide text
+		priority: 10;
+		newTextWithFormat: ('any boundary in software is arbitrary.' asRopedText glamorousRegularFont fontSize: 40; bold)
+]
+
 { #category : #utils }
 MoldableAnalysisPresentation >> codeFromMethod: aMethod [
 	| notTemp |
@@ -48,6 +56,22 @@ MoldableAnalysisPresentation >> downloadArgoUMLCodeAndMSE [
 	targetFolder
 ]
 
+{ #category : #slides }
+MoldableAnalysisPresentation >> enginesSlidesFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 10;
+		element: [| form |
+			form := PNGReadWriter formFromFileNamed: (GtResourceReference
+				path: Path * 'chisandrei' / 'moldable-analysis-presentation' / 'doc' / 'Engines.png') fullName.
+			BlElement new 
+				constraintsDo: [ :c |
+					c horizontal matchParent.
+					c vertical matchParent ];
+				addChild: form asElement asScalableElement 
+					fitWidth ]
+]
+
 { #category : #'code examples' }
 MoldableAnalysisPresentation >> extractBuildFoldersAndFilesFromModel: model [
 	<gtExample>
@@ -65,6 +89,19 @@ MoldableAnalysisPresentation >> extractDeprecatedGraphicalComponentsFrom: graphi
 	graphicalComponents select: [ :each |
 		each providerTypes anySatisfy: [ :provider |
 			provider isAnnotatedWith: 'Deprecated'] ]
+]
+
+{ #category : #slides }
+MoldableAnalysisPresentation >> extractDeprecatedGraphicalComponentsSlidesFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 80;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #extractGraphicalComponentsFrom:.
+				self codeFromSelector: #extractDeprecatedGraphicalComponentsFrom:
+			}) asElement. ]
 ]
 
 { #category : #'code examples' }
@@ -99,6 +136,19 @@ MoldableAnalysisPresentation >> getArgoUMLModel [
 		each name = 'ArgoUML-0-34' ]
 ]
 
+{ #category : #slides }
+MoldableAnalysisPresentation >> loadArgoMULSlideFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 20;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #downloadArgoUMLCodeAndMSE. 
+				self codeFromSelector: #loadMSEModelIntoImage.
+				self codeFromSelector: #saveTheModel:
+			}) asElement. ]
+]
+
 { #category : #'code examples' }
 MoldableAnalysisPresentation >> loadMSEModelIntoImage [
 	<gtExample>
@@ -119,130 +169,23 @@ MoldableAnalysisPresentation >> openArgoUmlReportOn: model [
 	ArgoUMLReport onModel: model
 ]
 
-{ #category : #'code examples' }
-MoldableAnalysisPresentation >> saveTheModel: model [
-	<gtExample>
-	"Save the model so we can reuse it other sides"
-	MooseModel root add: model
-]
-
 { #category : #slides }
-MoldableAnalysisPresentation >> slide1For: aSlide [
+MoldableAnalysisPresentation >> openArgoUmlReportSlideFor: aSlide [
 	<gtSlide>
 	^ aSlide element
-		priority: 1.1;
-		element: [| form |
-			form := PNGReadWriter formFromFileNamed: (GtResourceReference
-				path: Path * 'chisandrei' / 'moldable-analysis-presentation' / 'doc' / 'Engines.png') fullName.
-			BlElement new 
-				constraintsDo: [ :c |
-					c horizontal matchParent.
-					c vertical matchParent ];
-				addChild: form asElement asScalableElement 
-					fitWidth ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide2For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 2;
-		element: [
-			(GtPlaygroundLiveSlide new snippets: {
-				self codeFromSelector: #downloadArgoUMLCodeAndMSE. 
-				self codeFromSelector: #loadMSEModelIntoImage.
-				self codeFromSelector: #saveTheModel:
-			}) asElement. ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide3For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 3;
-		element: [
-			(GtPlaygroundLiveSlide new snippets: {
-				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
-				self codeFromSelector: #visualizeDeprecatedClassesFor:
-			}) asElement. ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide4For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 4;
-		element: [
-			(GtPlaygroundLiveSlide new snippets: {
-				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
-				self codeFromSelector: #visualizeDeprecatedClassesWithSizeFor:
-			}) asElement. ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide5For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 5;
-		element: [
-			(GtPlaygroundLiveSlide new snippets: {
-				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
-				self codeFromSelector: #visualizeDeprecatedClassesWithMethodsFor:
-			}) asElement. ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide6For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 6;
-		element: [
-			(GtPlaygroundLiveSlide new snippets: {
-				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
-				self codeFromSelector: #visualizeDeprecatedClassesWithMethodWithUsageSizeFor:
-			}) asElement. ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide7For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 7;
-		element: [
-			(GtPlaygroundLiveSlide new snippets: {
-				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractBuildFoldersAndFilesFromModel:.
-				self codeFromSelector: #visualizeBuildFilesFrom:
-			}) asElement. ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide8For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 8;
-		element: [
-			(GtPlaygroundLiveSlide new snippets: {
-				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractGraphicalComponentsFrom:.
-				self codeFromSelector: #extractDeprecatedGraphicalComponentsFrom:
-			}) asElement. ]
-]
-
-{ #category : #slides }
-MoldableAnalysisPresentation >> slide9For: aSlide [
-	<gtSlide>
-	^ aSlide element
-		priority: 9;
+		priority: 90;
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
 				self codeFromSelector: #openArgoUmlReportOn:
 			}) asElement. ]
+]
+
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> saveTheModel: model [
+	<gtExample>
+	"Save the model so we can reuse it other sides"
+	MooseModel root add: model
 ]
 
 { #category : #slides }
@@ -275,6 +218,19 @@ MoldableAnalysisPresentation >> visualizeBuildFilesFrom: interestingDirectories 
 	view edges connectFrom: #parent.
 	view layout tree. 
 	view
+]
+
+{ #category : #slides }
+MoldableAnalysisPresentation >> visualizeBuildFilesSlideFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 70;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #extractBuildFoldersAndFilesFromModel:.
+				self codeFromSelector: #visualizeBuildFilesFrom:
+			}) asElement. ]
 ]
 
 { #category : #'code examples' }
@@ -344,6 +300,19 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodWithUsageSiz
 	view
 ]
 
+{ #category : #slides }
+MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodWithUsageSizeSlideFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 60;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
+				self codeFromSelector: #visualizeDeprecatedClassesWithMethodWithUsageSizeFor:
+			}) asElement. ]
+]
+
 { #category : #'code examples' }
 MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodsFor: stillUsedClasses [
 	<gtExample>
@@ -380,6 +349,19 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodsFor: stillU
 	view
 ]
 
+{ #category : #slides }
+MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodsSlidesFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 50;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
+				self codeFromSelector: #visualizeDeprecatedClassesWithMethodsFor:
+			}) asElement. ]
+]
+
 { #category : #'code examples' }
 MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithSizeFor: stillUsedClasses [
 	<gtExample>
@@ -405,6 +387,32 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithSizeFor: stillUsed
 		charge: -250;
 		length: 70.
 	view
+]
+
+{ #category : #slides }
+MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithSizeSlideFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 40;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
+				self codeFromSelector: #visualizeDeprecatedClassesWithSizeFor:
+			}) asElement. ]
+]
+
+{ #category : #slides }
+MoldableAnalysisPresentation >> visualizeDeprecatedClassessSlideFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 30;
+		element: [
+			(GtPlaygroundLiveSlide new snippets: {
+				self codeFromSelector: #getArgoUMLModel. 
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
+				self codeFromSelector: #visualizeDeprecatedClassesFor:
+			}) asElement. ]
 ]
 
 { #category : #'code examples' }
