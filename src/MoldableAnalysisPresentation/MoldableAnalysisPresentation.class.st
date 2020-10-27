@@ -128,14 +128,12 @@ MoldableAnalysisPresentation >> saveTheModel: model [
 
 { #category : #slides }
 MoldableAnalysisPresentation >> slide1For: aSlide [
-	"<gtSlide>"
+	<gtSlide>
 	^ aSlide element
 		priority: 1.1;
 		element: [| form |
-			form := PNGReadWriter formFromFileNamed: (Path 
-				* 'MooseEngines.png') fullName.
-			"form := PNGReadWriter formFromFileNamed: (GtResourceReference
-					path: Path * 'feenkcom' / 'gtoolkit' / 'doc' / 'feenk.png') fullName."
+			form := PNGReadWriter formFromFileNamed: (GtResourceReference
+				path: Path * 'chisandrei' / 'moldable-analysis-presentation' / 'doc' / 'Engines.png') fullName.
 			BlElement new 
 				constraintsDo: [ :c |
 					c horizontal matchParent.
