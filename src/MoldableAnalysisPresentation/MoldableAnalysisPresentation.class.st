@@ -29,7 +29,7 @@ MoldableAnalysisPresentation >> codeFromSelector: aSelector [
 	^ self codeFromMethod: self class >> aSelector
 ]
 
-{ #category : #code }
+{ #category : #'code examples' }
 MoldableAnalysisPresentation >> downloadArgoUMLCodeAndMSE [
 	<gtExample>
 	<noTest>
@@ -48,7 +48,7 @@ MoldableAnalysisPresentation >> downloadArgoUMLCodeAndMSE [
 	targetFolder
 ]
 
-{ #category : #code }
+{ #category : #'code examples' }
 MoldableAnalysisPresentation >> extractBuildFoldersAndFilesFromModel: model [
 	<gtExample>
 	| interestingDirectories |
@@ -59,25 +59,27 @@ MoldableAnalysisPresentation >> extractBuildFoldersAndFilesFromModel: model [
 				ifFalse: [ each directories ] ].        
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> extractDeprecatedGraphicalComponents [
-	| graphicalComponents model |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> extractDeprecatedGraphicalComponentsFrom: graphicalComponents [
+	<gtExample>
 	graphicalComponents select: [ :each |
 		each providerTypes anySatisfy: [ :provider |
 			provider isAnnotatedWith: 'Deprecated'] ]
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> extractGraphicalComponents [
-	| graphicalComponents model |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> extractGraphicalComponentsFrom: model [
+	<gtExample>
+	| graphicalComponents |
 	graphicalComponents := model allModelClasses select: [ :aClass |
 		aClass superclassHierarchyGroup anySatisfy: [ :aSuperclass |
 			aSuperclass mooseName = 'java::awt::Component' ] ]
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> extractUsedDeprecatedClasses [
-	| model deprecatedClasses stillUsedClasses |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> extractUsedDeprecatedClassesFrom: model [
+	<gtExample>
+	| deprecatedClasses stillUsedClasses |
 	"Used deprecated classes"
 
 	deprecatedClasses := model allModelClasses select: [ :each |
@@ -88,15 +90,19 @@ MoldableAnalysisPresentation >> extractUsedDeprecatedClasses [
 			each clientTypes isNotEmpty ] ]
 ]
 
-{ #category : #code }
+{ #category : #'code examples' }
 MoldableAnalysisPresentation >> getArgoUMLModel [
+	<gtExample>
+	<noTest>
 	| model |
 	model := MooseModel root allModels detect: [ :each | 
 		each name = 'ArgoUML-0-34' ]
 ]
 
-{ #category : #code }
+{ #category : #'code examples' }
 MoldableAnalysisPresentation >> loadMSEModelIntoImage [
+	<gtExample>
+	<noTest>
 	"Load the MSE file into a FAMIX model"
 	| modelFile model |
 	modelFile := 'models' asFileReference
@@ -107,16 +113,16 @@ MoldableAnalysisPresentation >> loadMSEModelIntoImage [
 	model
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> openArgoUmlReport [
-	| model |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> openArgoUmlReportOn: model [
+	<gtExample>
 	ArgoUMLReport onModel: model
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> saveTheModel [
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> saveTheModel: model [
+	<gtExample>
 	"Save the model so we can reuse it other sides"
-	| model |
 	MooseModel root add: model
 ]
 
@@ -147,7 +153,7 @@ MoldableAnalysisPresentation >> slide2For: aSlide [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #downloadArgoUMLCodeAndMSE. 
 				self codeFromSelector: #loadMSEModelIntoImage.
-				self codeFromSelector: #saveTheModel
+				self codeFromSelector: #saveTheModel:
 			}) asElement. ]
 ]
 
@@ -159,7 +165,7 @@ MoldableAnalysisPresentation >> slide3For: aSlide [
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClasses.
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
 				self codeFromSelector: #visualizeDeprecatedClassesFor:
 			}) asElement. ]
 ]
@@ -172,8 +178,8 @@ MoldableAnalysisPresentation >> slide4For: aSlide [
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClasses.
-				self codeFromSelector: #visualizeDeprecatedClassesWithSize
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
+				self codeFromSelector: #visualizeDeprecatedClassesWithSizeFor:
 			}) asElement. ]
 ]
 
@@ -185,8 +191,8 @@ MoldableAnalysisPresentation >> slide5For: aSlide [
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClasses.
-				self codeFromSelector: #visualizeDeprecatedClassesWithMethods
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
+				self codeFromSelector: #visualizeDeprecatedClassesWithMethodsFor:
 			}) asElement. ]
 ]
 
@@ -198,8 +204,8 @@ MoldableAnalysisPresentation >> slide6For: aSlide [
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractUsedDeprecatedClasses.
-				self codeFromSelector: #visualizeDeprecatedClassesWithMethodWithUsageSize
+				self codeFromSelector: #extractUsedDeprecatedClassesFrom:.
+				self codeFromSelector: #visualizeDeprecatedClassesWithMethodWithUsageSizeFor:
 			}) asElement. ]
 ]
 
@@ -212,7 +218,7 @@ MoldableAnalysisPresentation >> slide7For: aSlide [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
 				self codeFromSelector: #extractBuildFoldersAndFilesFromModel:.
-				self codeFromSelector: #visualizeBuildFiles
+				self codeFromSelector: #visualizeBuildFilesFrom:
 			}) asElement. ]
 ]
 
@@ -224,8 +230,8 @@ MoldableAnalysisPresentation >> slide8For: aSlide [
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #extractGraphicalComponents.
-				self codeFromSelector: #extractDeprecatedGraphicalComponents
+				self codeFromSelector: #extractGraphicalComponentsFrom:.
+				self codeFromSelector: #extractDeprecatedGraphicalComponentsFrom:
 			}) asElement. ]
 ]
 
@@ -237,7 +243,7 @@ MoldableAnalysisPresentation >> slide9For: aSlide [
 		element: [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
-				self codeFromSelector: #openArgoUmlReport
+				self codeFromSelector: #openArgoUmlReportOn:
 			}) asElement. ]
 ]
 
@@ -253,9 +259,10 @@ MoldableAnalysisPresentation >> titleSlideFor: aSlide [
 			in: [:t | (t from: 'Moldable' size + 1 to: t size) bold]; yourself)
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> visualizeBuildFiles [
-	| interestingDirectories view |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> visualizeBuildFilesFrom: interestingDirectories [
+	<gtExample>
+	| view |
 	view := GtMondrian new.
 	view nodes
 		shape: [ :each |
@@ -272,7 +279,7 @@ MoldableAnalysisPresentation >> visualizeBuildFiles [
 	view
 ]
 
-{ #category : #code }
+{ #category : #'code examples' }
 MoldableAnalysisPresentation >> visualizeDeprecatedClassesFor: stillUsedClasses [
 	<gtExample>
 	| view |
@@ -293,9 +300,10 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesFor: stillUsedClasses 
 	view
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodWithUsageSize [
-	| deprecateMethods clientMethods interestingMethods view stillUsedClasses |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodWithUsageSizeFor: stillUsedClasses [
+	<gtExample>
+	| deprecateMethods clientMethods interestingMethods view |
 	deprecateMethods := (stillUsedClasses flatCollect: #methods)
 		select: [ :aMethod | aMethod clientTypes notEmpty ].
 	clientMethods := (deprecateMethods collect: [ :aMethod | 
@@ -338,9 +346,10 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodWithUsageSiz
 	view
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethods [
-	| deprecateMethods clientMethods interestingMethods view stillUsedClasses |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethodsFor: stillUsedClasses [
+	<gtExample>
+	| deprecateMethods clientMethods interestingMethods view |
 	deprecateMethods := (stillUsedClasses flatCollect: #methods)
 		select: [ :aMethod | aMethod clientTypes notEmpty ].
 	clientMethods := (deprecateMethods collect: [ :aMethod | 
@@ -373,9 +382,10 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithMethods [
 	view
 ]
 
-{ #category : #code }
-MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithSize [
-	| view stillUsedClasses |
+{ #category : #'code examples' }
+MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithSizeFor: stillUsedClasses [
+	<gtExample>
+	| view |
 	view := GtMondrian new.
 	view nodes 
 		shape: [ :each |
@@ -399,7 +409,7 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesWithSize [
 	view
 ]
 
-{ #category : #code }
+{ #category : #'code examples' }
 MoldableAnalysisPresentation >> visualizeXMLFileTargets [
 	| tags view |
 	tags := self // 'target'.
