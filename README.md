@@ -1,2 +1,2 @@
-# Modable Analysis with Glamorous Toolkit Live Presentation
+# Modable Analysis with Glamorous Toolkit
 
