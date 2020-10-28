@@ -1,7 +1,7 @@
 "
 Inspect the presentation
 [[[
-GtLiveShow createWithArrowsVisible: MoldableAnalysisPresentation new) create.		
+(GtLiveShow createWithArrowsVisible: MoldableAnalysisPresentation new) create.		
 ]]]
 
 Open the presentation in a new window.
@@ -57,7 +57,8 @@ MoldableAnalysisPresentation >> downloadArgoUMLCodeAndMSE [
 	<noTest>
 	| targetFolder archiveFileName archiveUrl |
 	"Download ArgoUML code and MSE model file"
-	targetFolder := 'models' asFileReference ensureCreateDirectory.
+	targetFolder := (FileLocator imageDirectory / 
+		'models') asFileReference ensureCreateDirectory.
 	archiveFileName := 'ArgoUML-0-34.zip'.
 	archiveUrl := 'https://dl.feenk.com/moose-tutorial/argouml/'. 
 	ZnClient new
@@ -198,11 +199,12 @@ MoldableAnalysisPresentation >> loadArgoMULSlideFor: aSlide [
 MoldableAnalysisPresentation >> loadMSEModelIntoImage [
 	<gtExample>
 	<noTest>
-	"Load the MSE file into a FAMIX model"
+	"Load the MSE file into a FAMIX model. Takes a few minutes"
 	| modelFile model |
-	modelFile := 'models' asFileReference
-		/ 'ArgoUML-0-34'
-		/ 'ArgoUML-0-34.mse'.
+	modelFile := (FileLocator imageDirectory / 
+		'models') asFileReference
+			/ 'ArgoUML-0-34'
+			/ 'ArgoUML-0-34.mse'.
 	model := MooseModel new
 		importMSEFromFile: modelFile.
 	model
