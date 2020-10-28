@@ -1,3 +1,17 @@
+"
+Inspect the presentation
+[[[
+GtLiveShow createWithArrowsVisible: MoldableAnalysisPresentation new) create.		
+]]]
+
+Open the presentation in a new window.
+[[[
+space := BlSpace new.
+space root addChild: (GtLiveShow createWithArrowsVisible: MoldableAnalysisPresentation new) create.
+space title: 'Moldable analysis'.
+space show			
+]]]
+"
 Class {
 	#name : #MoldableAnalysisPresentation,
 	#superclass : #Object,
