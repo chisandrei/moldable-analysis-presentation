@@ -60,10 +60,10 @@ MoldableAnalysisPresentation >> downloadArgoUMLCodeAndMSE [
 MoldableAnalysisPresentation >> enginesSlidesFor: aSlide [
 	<gtSlide>
 	^ aSlide element
-		priority: 10;
+		priority: 15;
 		element: [| form |
 			form := PNGReadWriter formFromFileNamed: (GtResourceReference
-				path: Path * 'chisandrei' / 'moldable-analysis-presentation' / 'doc' / 'Engines.png') fullName.
+				path: Path * 'chisandrei' / 'moldable-analysis-presentation' / 'doc' / 'analysis-engines.png') fullName.
 			BlElement new 
 				constraintsDo: [ :c |
 					c horizontal matchParent.
@@ -125,6 +125,37 @@ MoldableAnalysisPresentation >> extractUsedDeprecatedClassesFrom: model [
 	stillUsedClasses := deprecatedClasses select: [ :each |
 		(each isAnnotatedWith: 'Deprecated') and: [
 			each clientTypes isNotEmpty ] ]
+]
+
+{ #category : #slides }
+MoldableAnalysisPresentation >> feenkSlideFor: aSlide [
+	<gtSlide>
+	^ aSlide element
+		priority: 1.1;
+		element: [| container form |
+				form := PNGReadWriter formFromFileNamed: (GtResourceReference
+						path: Path * 'feenkcom' / 'gtoolkit' / 'doc' / 'feenk.png') fullName.
+BlElement new 
+			constraintsDo: [ :c |
+				c horizontal matchParent.
+				c vertical matchParent ];
+			layout: BlLinearLayout horizontal;
+				addChild: (
+					BlElement new
+						constraintsDo: [ :c |
+							c horizontal matchParent.
+							c vertical fitContent.
+							c linear vertical alignCenter ];
+						layout: BlLinearLayout vertical;
+						addChild: (BrVerticalPane new 
+							constraintsDo: [ :c |
+								c linear horizontal alignCenter ];
+							addChild: (form asElement asScalableElement maxScale: 0.2; constraintsDo: [:c | c horizontal matchParent. c vertical matchParent]); hExact: 400; vExact: 200);
+						addChild: (BlTextElement new 
+							constraintsDo: [ :c |
+								c linear horizontal alignCenter ];
+							text: (('we make your systems explainable.' asRopedText glamorousRegularFont bold fontSize: 30))))
+				]
 ]
 
 { #category : #'code examples' }
@@ -193,11 +224,12 @@ MoldableAnalysisPresentation >> titleSlideFor: aSlide [
 	<gtSlide>
 	^ aSlide title
 		priority: 1;
-		titleWithFormat: ('Moldable Analysis' asRopedText 
+		titleWithFormat: ('moldableanalysis' asRopedText 
 			fontSize: 80;
 			glamorousRegularFont;
 			thin; 
-			in: [:t | (t from: 'Moldable' size + 1 to: t size) bold]; yourself)
+			in: [:t | (t from: 'Moldable' size + 1 to: t size) bold]; yourself);
+		subtitleWithFormat: ('@chis_andrei' asRopedText glamorousRegularFont bold fontSize: 50)
 ]
 
 { #category : #'code examples' }
@@ -246,7 +278,11 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassesFor: stillUsedClasses 
 				geometry: BlCircle new;
 				background:((each isAnnotatedWith: 'Deprecated')
 					ifTrue: [Color red]
-					ifFalse: [Color gray]) ];
+					ifFalse: [Color gray]);
+				border: (BlBorder paint: 
+					((each mooseName includesSubstring: '::ui')
+						ifTrue: [ Color blue ]
+						ifFalse: [ Color transparent ])) ];
 		with: (stillUsedClasses, (stillUsedClasses flatCollect: #clientTypes)) asSet.
 
 	view edges connectFromAll: #clientTypes. 
