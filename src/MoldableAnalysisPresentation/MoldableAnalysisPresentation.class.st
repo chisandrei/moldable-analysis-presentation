@@ -261,7 +261,9 @@ MoldableAnalysisPresentation >> visualizeBuildFilesSlideFor: aSlide [
 			(GtPlaygroundLiveSlide new snippets: {
 				self codeFromSelector: #getArgoUMLModel. 
 				self codeFromSelector: #extractBuildFoldersAndFilesFromModel:.
-				self codeFromSelector: #visualizeBuildFilesFrom:
+				self codeFromSelector: #visualizeBuildFilesFrom:.
+				
+				self codeFromSelector: #visualizeXMLFileTargets
 			}) asElement. ]
 ]
 
@@ -453,14 +455,16 @@ MoldableAnalysisPresentation >> visualizeDeprecatedClassessSlideFor: aSlide [
 
 { #category : #'code examples' }
 MoldableAnalysisPresentation >> visualizeXMLFileTargets [
-	| tags view |
-	tags := self // 'target'.
+	|interestingDirectories xmlDoc tags view|
+	xmlDoc := XMLDOMParser parse: (interestingDirectories at: 8) / 'build.xml'.
+	tags := xmlDoc // 'target'.
 	view := GtMondrian new.
 	view nodes with: tags.
 	view edges connectFromAll:  [:aTag | |depends|
-		depends:=(aTag @ 'depends') stringValue splitOn: ', '.
+	depends:=(aTag @ 'depends') stringValue splitOn: ', '.
 		tags select: [ :each | 
 			depends includes: (each @ 'name') stringValue] ].
 	view layout dominanceTree.
 	view.
+
 ]
