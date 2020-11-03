@@ -11,7 +11,7 @@ Metacello new
 
 Inspect the presentation
 ```
-GtLiveShow createWithArrowsVisible: MoldableAnalysisPresentation new) create.		
+(GtLiveShow createWithArrowsVisible: MoldableAnalysisPresentation new) create.		
 ```
 
 Open the presentation in a new window.
